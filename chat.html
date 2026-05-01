@@ -22,6 +22,10 @@
 
 
 
+
+
+
+
         [data-theme="dark"] {
             /* وضع الليل (أفق عميق) */
             --bg-body: #0F172A;
@@ -31,6 +35,10 @@
             --card-bg: #1E293B;
             --border-color: #334155;
         }
+
+
+
+
 
 
 
@@ -45,6 +53,10 @@
             overflow: hidden;
             transition: all 0.3s ease;
         }
+
+
+
+
 
 
 
@@ -64,11 +76,19 @@
 
 
 
+
+
+
+
         .logo-container {
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
+
+
+
+
 
 
 
@@ -83,6 +103,10 @@
 
 
 
+
+
+
+
         .nav-links a {
             font-size: 0.875rem;
             font-weight: 700;
@@ -93,8 +117,16 @@
 
 
 
+
+
+
+
         .nav-links a:hover { color: var(--accent-gold); }
         .nav-links a.active { color: var(--accent-gold); border-bottom: 2px solid var(--accent-gold); padding-bottom: 0.25rem; }
+
+
+
+
 
 
 
@@ -112,6 +144,10 @@
 
 
 
+
+
+
+
         /* Chat Container Layout */
         .app-container {
             flex: 1;
@@ -120,6 +156,10 @@
             align-items: center;
             padding: 20px;
         }
+
+
+
+
 
 
 
@@ -140,6 +180,10 @@
 
 
 
+
+
+
+
         #chat-flow {
             flex: 1;
             padding: 25px;
@@ -149,6 +193,10 @@
             gap: 15px;
             background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20L40 20L20 40L0 20L20 0L20 20Z' fill='%2364748b' fill-opacity='0.03'/%3E%3C/svg%3E");
         }
+
+
+
+
 
 
 
@@ -164,6 +212,10 @@
 
 
 
+
+
+
+
         .user-msg {
             align-self: flex-start;
             background-color: #0F172A;
@@ -174,7 +226,15 @@
 
 
 
+
+
+
+
         [data-theme="dark"] .user-msg { background-color: #000000; border: 1px solid var(--border-color); }
+
+
+
+
 
 
 
@@ -190,7 +250,15 @@
 
 
 
+
+
+
+
         .badge { background: var(--accent-gold); color: #0F172A; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; }
+
+
+
+
 
 
 
@@ -202,6 +270,10 @@
             display: flex;
             gap: 12px;
         }
+
+
+
+
 
 
 
@@ -219,7 +291,15 @@
 
 
 
+
+
+
+
         .input-box:focus { border-color: var(--accent-gold); }
+
+
+
+
 
 
 
@@ -240,6 +320,10 @@
 
 
 
+
+
+
+
         [data-theme="dark"] .send-btn { background: var(--accent-gold); color: #0F172A; }
     </style>
 </head>
@@ -254,6 +338,10 @@
 
 
 
+
+
+
+
                     <div class="hidden lg:flex gap-8">
                 <a href="index.html" class="nav-link  text-[#FFB800]">الرئيسية</a>
                 <a href="tests.html" class="nav-link">الاختبارات</a>
@@ -263,7 +351,15 @@
 
 
 
+
+
+
+
             </div>
+
+
+
+
 
 
 
@@ -290,6 +386,10 @@
 
 
 
+
+
+
+
             <div class="input-area">
                 <input type="text" id="mathInput" class="input-box" placeholder="اكتب مسألتك هنا واضغط Enter..." autocomplete="off">
                 <button class="send-btn" id="sendBtn">
@@ -298,6 +398,10 @@
             </div>
         </div>
     </main>
+
+
+
+
 
 
 
@@ -314,11 +418,19 @@ function formatReply(text) {
 
 
 
+
+
+
+
         // إزالة رموز الماركداون
         .replace(/###/g, "")
         .replace(/\*\*/g, "")
         .replace(/\$/g, "")
         .replace(/\\sqrt/g, "√")
+
+
+
+
 
 
 
@@ -332,8 +444,16 @@ function formatReply(text) {
 
 
 
+
+
+
+
         // فواصل جميلة
         .replace(/\n\n/g, "<br><br>────────────<br><br>")
+
+
+
+
 
 
 
@@ -348,9 +468,17 @@ function formatReply(text) {
 
 
 
+
+
+
+
     addMessage(text, 'user');
     inputField.value = '';
     chatFlow.scrollTop = chatFlow.scrollHeight;
+
+
+
+
 
 
 
@@ -365,8 +493,12 @@ function formatReply(text) {
 
 
 
+
+
+
+
     try {
-        const res = await fetch("http://localhost:5000/api/chat", {
+        const res = await fetch("https://q-ad1y.onrender.com/api/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -379,7 +511,15 @@ function formatReply(text) {
 
 
 
+
+
+
+
         const data = await res.json();
+
+
+
+
 
 
 
@@ -392,6 +532,10 @@ ${formatReply(data.reply)}
 
 
 
+
+
+
+
     } catch (err) {
         loadingMsg.innerHTML = "❌ حدث خطأ في الاتصال بالسيرفر";
         console.error(err);
@@ -400,10 +544,18 @@ ${formatReply(data.reply)}
 
 
 
+
+
+
+
     chatFlow.scrollTop = chatFlow.scrollHeight;
 }
            
        
+
+
+
+
 
 
 
@@ -418,8 +570,16 @@ ${formatReply(data.reply)}
 
 
 
+
+
+
+
         inputField.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSendMessage(); });
         sendBtn.addEventListener('click', handleSendMessage);
+
+
+
+
 
 
 
@@ -438,6 +598,20 @@ ${formatReply(data.reply)}
     <script src="theme.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
