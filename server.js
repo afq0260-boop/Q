@@ -168,7 +168,8 @@ app.post("/api/plan", async (req, res) => {
 // ========================================
 // 🔹 تشغيل السيرفر
 // ========================================
-app.listen(5000, () => {
-  console.log("🚀 UFUQ AI SERVER RUNNING ON http://localhost:5000");
-});
+const PORT = process.env.PORT || 5000;
 
+app.listen(PORT, () => {
+  console.log(`🚀 UFUQ AI SERVER RUNNING ON PORT ${PORT}`);
+});
