@@ -401,11 +401,6 @@
 
 
 
-
-
-
-
-
     <script>
         const inputField = document.getElementById('mathInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -430,11 +425,6 @@ function formatReply(text) {
 
 
 
-
-
-
-
-
         // تحويل العناوين
         .replace(/الحل النهائي/g, "🧠 <b>الحل النهائي:</b>")
         .replace(/شرح الفكرة/g, "📘 <b>شرح الفكرة:</b>")
@@ -442,20 +432,8 @@ function formatReply(text) {
         .replace(/مثال مشابه/g, "📝 <b>مثال مشابه:</b>")
 
 
-
-
-
-
-
-
         // فواصل جميلة
         .replace(/\n\n/g, "<br><br>────────────<br><br>")
-
-
-
-
-
-
 
 
         // تحويل الأسطر
@@ -498,7 +476,7 @@ function formatReply(text) {
 
 
     try {
-        const res = await fetch("https://q-ad1y.onrender.com/api/chat", {
+        const res = await fetch("https://q-server-2.onrender.com/api/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -510,19 +488,7 @@ function formatReply(text) {
 
 
 
-
-
-
-
-
         const data = await res.json();
-
-
-
-
-
-
-
 
         loadingMsg.innerHTML = `
             <div class="font-bold mb-1 text-xs">مساعد أفق ✨</div>
@@ -530,34 +496,16 @@ ${formatReply(data.reply)}
             `;
 
 
-
-
-
-
-
-
-    } catch (err) {
+} catch (err) {
         loadingMsg.innerHTML = "❌ حدث خطأ في الاتصال بالسيرفر";
         console.error(err);
     }
-
-
-
-
-
-
 
 
     chatFlow.scrollTop = chatFlow.scrollHeight;
 }
            
        
-
-
-
-
-
-
 
 
         function addMessage(content, type) {
@@ -576,12 +524,6 @@ ${formatReply(data.reply)}
 
         inputField.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSendMessage(); });
         sendBtn.addEventListener('click', handleSendMessage);
-
-
-
-
-
-
 
 
         // Theme Toggle Logic
