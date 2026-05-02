@@ -487,7 +487,7 @@ async function aiAction(mode) {
     showAlert('✨', 'الذكاء الاصطناعي', 'جاري التحليل...', 'انتظر');
 
     try {
-        const response = await fetch(`https://q-ad1y.onrender.com/api/${mode}`, {
+        const response = await fetch(`https://q-server-2.onrender.com/api/${mode}`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
