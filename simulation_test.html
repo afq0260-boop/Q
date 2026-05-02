@@ -3,331 +3,409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أفق | تجربة الاختبار الفاخرة</title>
+    <title>محاكاة اختبار أُفق | OFOQ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary-navy: #0f172a;
-            --accent-gold: #ffd15d;
-            --surface: #1e293b;
+            --ofoq-navy: #0f172a;
+            --ofoq-gold: #ffd15d;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --border-color: #e2e8f0;
         }
 
-
-        .light-mode {
-            --primary-navy: #f1f5f9;
-            --accent-gold: #b48a04;
-            --surface: #ffffff;
+        .dark {
+            --bg-main: #020617;
+            --card-bg: #0f172a;
+            --text-main: #f1f5f9;
+            --border-color: #1e293b;
         }
 
-
-        body {
+         body {
             font-family: 'Cairo', sans-serif;
-            background-color: var(--primary-navy);
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            min-height: 100vh;
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30L60 30L30 60L0 30L30 0L30 30Z' fill='%23FFB800' fill-opacity='0.03'/%3E%3C/svg%3E");
-            background-size: 30px 30px;
-            color: white;
-            transition: all 0.3s ease;
+
+
         }
 
 
-        .light-mode { color: #1e293b; }
+        /* الوضع النهاري - مطابق تماماً للرئيسية */
+        body.light-mode {
+            background-color: #fdfaf5;
+            background-image: var(--bg-pattern);
+            color: var(--brand-navy);
+                   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30L60 30L30 60L0 30L30 0L30 30Z' fill='%23FFB800' fill-opacity='0.03'/%3E%3C/svg%3E");
 
 
-        .glass-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 209, 93, 0.1);
-            border-radius: 1.5rem;
+     }
+
+
+
+
+        /* الوضع الليلي - مطابق تماماً للرئيسية */
+        body.dark-mode {
+            background-color: #111827;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30L60 30L30 60L0 30L30 0L30 30Z' fill='%23FFB800' fill-opacity='0.03'/%3E%3C/svg%3E");
+            color: #f3f4f6;
         }
 
 
-        .light-mode .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(15, 23, 42, 0.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        .test-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
         }
 
+        .opt-btn {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-main);
+            transition: 0.2s;
+        }
 
-        /* أزرار لوحة الأسئلة */
+        .opt-btn.selected {
+            background-color: var(--ofoq-gold) !important;
+            border-color: var(--ofoq-gold) !important;
+            color: #000 !important;
+            font-weight: 700;
+        }
+
+        /* إصلاح منطق العلامات */
         .nav-dot {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
             font-weight: 700;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            position: relative;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid var(--border-color);
+            background: var(--card-bg);
         }
 
+        .dot-active { border-color: var(--ofoq-gold) !important; color: var(--ofoq-gold); transform: scale(1.1); box-shadow: 0 0 15px rgba(255, 209, 93, 0.3); }
+        .dot-answered { background: var(--ofoq-gold) !important; border-color: var(--ofoq-gold) !important; color: #000 !important; }
+        .dot-flagged { border-color: #ef4444 !important; color: #ef4444 !important; background: #fee2e2 !important; }
+        .dark .dot-flagged { background: #450a0a !important; }
 
-        .nav-dot.active { border: 2px solid var(--accent-gold); color: var(--accent-gold); }
-        .nav-dot.answered { background: var(--accent-gold); color: #0f172a; border-color: var(--accent-gold); }
-        .nav-dot.flagged::after {
-            content: '';
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 10px;
-            height: 10px;
-            background: #ef4444;
-            border-radius: 50%;
-            border: 2px solid var(--primary-navy);
+        .progress-bar {
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--ofoq-gold);
+            transition: width 0.4s ease;
         }
 
-
-        .opt-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 1.25rem;
-            border-radius: 1rem;
-            text-align: right;
-            transition: 0.2s;
-        }
-       
-        .opt-btn.selected {
-            background: var(--accent-gold) !important;
-            color: #0f172a !important;
-            border-color: var(--accent-gold) !important;
-            font-weight: 700;
-        }
-
-
-        .next-btn {
-            background-color: #ffd15d;
-            color: #0f172a;
-            font-weight: 900;
-            padding: 1rem 3rem;
-            border-radius: 1rem;
-            transition: 0.2s;
-        }
-
-
-        .next-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255, 209, 93, 0.2); }
+        #modal { display: none; backdrop-filter: blur(8px); }
     </style>
 </head>
-<body class="min-h-screen pb-10">
+<body class="antialiased">
 
+    <!-- نافذة التنبيه -->
+    <div id="modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4">
+        <div class="test-card p-8 max-w-sm w-full text-center">
+            <div class="text-yellow-500 text-5xl mb-4"><i class="fas fa-exclamation-circle"></i></div>
+            <h3 class="text-xl font-black mb-2">تأكيد إنهاء الاختبار</h3>
+            <p class="opacity-70 mb-8">هل أنت متأكد من رغبتك في تسليم الإجابات الآن؟</p>
+            <div class="flex gap-4">
+                <button onclick="finishTest()" class="flex-1 bg-red-500 text-white py-3 rounded-xl font-bold">نعم، إنهاء</button>
+                <button onclick="closeModal()" class="flex-1 bg-slate-200 text-slate-700 py-3 rounded-xl font-bold">تراجع</button>
+            </div>
+        </div>
+    </div>
 
-       
-        <nav class="bg-[#141d31] text-white px-6 py-4 flex justify-between items-center sticky top-0 z-50 shadow-2xl">
+    <header class="sticky top-0 z-50 bg-[#0f172a] text-white py-4 px-6 lg:px-12 flex justify-between items-center shadow-xl">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
              <div class="flex-shrink-0 flex items-center space-x-2 space-x-reverse">
                     <img class="h-12 w-auto rounded-full" src="logo.png" alt="UFUQ Logo">
                     <span class="text-3xl font-bold tracking-tight text-white/90">أفق (UFUQ)</span>
                 </div>
-
-
-           
-            <div class="hidden lg:flex gap-8">
-                <a href="index.html" class="nav-link  text-[#FFB800]">الرئيسية</a>
-                <a href="tests.html" class="nav-link">الاختبارات</a>
-                <a href="study-plan.html" class="nav-link">خطة المذاكرة</a>
-                <a href="chat.html" class="nav-link">الدردشة الذكية  </a>
-
-
-            </div>
-
-
-
-
+        <div class="flex items-center gap-6">
+            <div id="timer" class="font-mono text-2xl font-black text-yellow-400 bg-white/5 px-4 py-1 rounded-lg border border-white/10">15:00</div>
+            <button onclick="toggleDarkMode()"><i id="theme-icon" class="fas fa-moon"></i></button>
+            <button onclick="openModal()" class="bg-red-500 hover:bg-red-600 px-6 py-2 rounded-xl font-black transition text-sm">تسليم</button>
         </div>
-   
-   
-       
-    </div>
- <div class="flex items-center gap-5">
-            <button onclick="toggleTheme()" class="opacity-40 hover:opacity-100 transition"><i id="t-icon" class="fas fa-moon"></i></button>
-            <div id="timer" class="font-mono text-lg font-bold text-[#ffd15d] bg-white/5 px-4 py-1 rounded-lg border border-white/5">25:00</div>
-            <button onclick="finishTest()" class="text-red-500 font-bold text-sm">إنهاء</button>
-        </div>
-</nav>
+    </header>
 
-
-       
-   
-
-
-    <main id="main-test" class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
-       
+    <main id="test-view" class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
         <aside class="lg:col-span-3 order-2 lg:order-1">
-            <div class="glass-card p-6 sticky top-6">
-                <h3 class="text-sm font-black uppercase tracking-widest opacity-40 mb-6 flex items-center gap-2">
-                    <i class="fas fa-th-large text-[#ffd15d]"></i> خريطة الأسئلة
+            <div class="test-card p-6 sticky top-28">
+                <h3 class="font-black mb-4 flex justify-between">
+                    <span>خريطة الأسئلة</span>
+                    <span id="progress-percent" class="text-yellow-500">0%</span>
                 </h3>
-                <div id="nav-dots-grid" class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-4 gap-3">
-                    </div>
-               
-                <div class="mt-8 pt-6 border-t border-white/5 space-y-3 opacity-60">
-                    <div class="flex items-center gap-2 text-[10px] font-bold"><span class="w-3 h-3 bg-[#ffd15d] rounded-sm"></span> تم الحل</div>
-                    <div class="flex items-center gap-2 text-[10px] font-bold"><span class="w-3 h-3 bg-red-500 rounded-sm"></span> للمراجعة</div>
-                </div>
+                <div class="progress-bar mb-6"><div id="progress-fill" class="progress-fill" style="width: 0%"></div></div>
+                <div id="nav-grid" class="grid grid-cols-4 gap-2 mb-8"></div>
             </div>
         </aside>
 
-
-        <section class="lg:col-span-9 order-1 lg:order-2">
-            <div class="mb-6 space-y-2">
-                <div class="flex justify-between text-[10px] font-black uppercase tracking-widest opacity-40">
-                    <span>نسبة الإنجاز</span>
-                    <span id="prog-val">0%</span>
+        <div class="lg:col-span-9 order-1 lg:order-2">
+            <div class="test-card p-8 md:p-14 relative min-h-[450px] flex flex-col">
+                <div class="flex justify-between items-start mb-8">
+                    <span class="bg-yellow-400/20 text-yellow-600 dark:text-yellow-400 px-4 py-1 rounded-full text-xs font-black">القسم الكمي</span>
+                    <button onclick="toggleFlag()" id="flag-btn" class="text-2xl transition hover:scale-110"><i class="fas fa-bookmark"></i></button>
                 </div>
-                <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                    <div id="prog-bar" class="bg-[#ffd15d] h-full w-0 transition-all duration-500"></div>
+                <div class="flex-1">
+                    <h2 id="q-text" class="text-2xl md:text-3xl font-black leading-relaxed mb-12">جارِ التحميل...</h2>
+                    <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+                <div class="flex justify-between mt-12 pt-8 border-t border-slate-100 dark:border-slate-800">
+                    <button onclick="prev()" class="font-bold opacity-50 hover:opacity-100 transition">السابق</button>
+                    <button onclick="next()" id="next-btn" class="bg-[#0f172a] dark:bg-yellow-500 text-white dark:text-black px-12 py-3 rounded-2xl font-black shadow-lg">التالي</button>
                 </div>
             </div>
-
-
-            <div class="glass-card p-8 md:p-14 mb-8">
-                <div class="flex justify-between items-start mb-10">
-                    <div>
-                        <span class="bg-[#ffd15d]/10 text-[#ffd15d] px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest">Question <span id="q-idx">1</span></span>
-                        <h2 id="q-text" class="text-xl md:text-3xl font-bold mt-6 leading-relaxed">...</h2>
-                    </div>
-                    <button onclick="toggleFlag()" id="flag-btn" class="text-xl opacity-20 hover:text-red-500 transition-all"><i class="fas fa-flag"></i></button>
-                </div>
-
-
-                <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-            </div>
-
-
-            <div class="flex justify-between items-center">
-                <button onclick="prev()" class="font-bold opacity-30 hover:opacity-100 transition flex items-center gap-2"><i class="fas fa-arrow-right"></i> السابق</button>
-                <button onclick="next()" class="next-btn flex items-center gap-3">
-                    <span>التالي</span>
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-            </div>
-        </section>
+        </div>
     </main>
 
-
-    <div id="result-view" class="hidden max-w-2xl mx-auto px-6 py-20 text-center">
-        <div class="glass-card p-12">
-            <div class="w-20 h-20 bg-[#ffd15d] text-[#0f172a] rounded-full flex items-center justify-center text-4xl mx-auto mb-6"><i class="fas fa-check"></i></div>
-            <h2 class="text-3xl font-black mb-10 tracking-tight">تم الاختبار بنجاح</h2>
-            <div class="grid grid-cols-2 gap-4 mb-10 text-white">
-                <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
-                    <div class="text-3xl font-black text-green-400" id="res-c">0</div>
-                    <div class="text-[10px] font-bold opacity-40 mt-1 uppercase">إجابات صحيحة</div>
-                </div>
-                <div class="p-6 bg-white/5 rounded-2xl border border-white/5">
-                    <div class="text-3xl font-black text-red-400" id="res-w">0</div>
-                    <div class="text-[10px] font-bold opacity-40 mt-1 uppercase">إجابات خاطئة</div>
-                </div>
-            </div>
-            <div class="text-7xl font-black text-[#ffd15d] mb-12" id="res-p">0%</div>
-            <button onclick="location.reload()" class="w-full bg-[#ffd15d] text-[#0f172a] py-4 rounded-xl font-black text-lg transition hover:scale-105">إعادة المحاكاة</button>
+    <div id="result-view" class="hidden max-w-4xl mx-auto px-6 py-20">
+        <div class="test-card p-12 text-center mb-10">
+            <h2 class="text-3xl font-black mb-4 text-ofoq-navy dark:text-ofoq-gold">النتيجة النهائية</h2>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button onclick="location.reload()" class="bg-[#0f172a] dark:bg-yellow-500 text-white dark:text-black px-10 py-3 rounded-xl font-bold hover:opacity-90 transition">
+                <i class="fas fa-redo-alt ml-2"></i> إعادة الاختبار
+            </button>
+            
+            <a href="index.html" class="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-10 py-3 rounded-xl font-bold hover:bg-slate-300 dark:hover:bg-slate-700 transition flex items-center justify-center">
+                <i class="fas fa-home ml-2"></i> العودة للرئيسية
+            </a>
         </div>
+
+        <div id="review-list" class="space-y-4"></div>
     </div>
 
-
     <script>
-        const questions = [
-            { q: "إذا كان س = 4، فما قيمة التعبير 3س² - 2س + 5؟", opts: ["45", "40", "48", "39"], a: "45" },
-            { q: "مستطيل طوله 6 وعرضه 4، ما مساحته؟", opts: ["24", "10", "12", "18"], a: "24" },
-            { q: "ما هو العدد التالي في المتتالية: 2, 5, 10, 17, ...؟", opts: ["24", "26", "28", "30"], a: "26" },
-            { q: "إذا كان سعر كتاب 50 ريال وزاد سعره بنسبة 20%، كم أصبح؟", opts: ["55", "60", "70", "75"], a: "60" },
-            { q: "قيمة الجذر التربيعي للعدد 144 هي؟", opts: ["10", "11", "12", "14"], a: "12" },
-            { q: "إذا كان 3س = 27، فما قيمة س؟", opts: ["7", "8", "9", "10"], a: "9" },
-            { q: "كم عدد الثواني في 5 دقائق؟", opts: ["250", "300", "350", "400"], a: "300" },
-            { q: "أي الأعداد التالية أولي؟", opts: ["9", "15", "17", "21"], a: "17" }
+        // مصفوفة الأسئلة الكبيرة (أضف هنا الـ 100 سؤال)
+        const allQuestions = [
+            {q: "مقارنة: 1/2 ÷ 2 ، القيمة الثانية: 1/2 × 1/2", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان"},
+            {q: "إذا كان 2^(س+1) = 2^5 ، فما قيمة س؟", options: ["2", "3", "4", "5"], answer: "4"},
+            {q: "مستطيل محيطه 40 وطوله 12، فما عرضه؟", options: ["8", "10", "14", "16"], answer: "8"},
+            {q: "سعر جهاز 2400 ريال، عليه خصم 25%، فبكم نشتريه؟", options: ["1600", "1800", "2000", "2100"], answer: "1800"},
+{q: "مقارنة: 1/2 ÷ 2 ، القيمة الثانية: 1/2 × 1/2", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "كلاهما يساوي 0.25"},
+    {q: "إذا كان 2^(س+1) = 2^5 ، فما قيمة س؟", options: ["2", "3", "4", "5"], answer: "4", type: "الجبر", explanation: "س + 1 = 5 إذن س = 4"},
+    {q: "مستطيل محيطه 40 وطوله 12، فما عرضه؟", options: ["8", "10", "14", "16"], answer: "8", type: "الهندسة", explanation: "20 - 12 = 8"},
+    {q: "سعر جهاز 2400 ريال، عليه خصم 25%، فبكم نشتريه؟", options: ["1600", "1800", "2000", "2100"], answer: "1800", type: "النسب المئوية", explanation: "2400 - 600 = 1800"},
+    {q: "سيارة تقطع 300 كم في 3 ساعات، كم تقطع في 5 ساعات؟", options: ["400", "450", "500", "600"], answer: "500", type: "السرعة", explanation: "(300÷3) × 5 = 500"},
+    {q: "متوسط 4 أعداد هو 15، فما مجموع هذه الأعداد؟", options: ["30", "45", "60", "75"], answer: "60", type: "الإحصاء", explanation: "15 × 4 = 60"},
+    {q: "مقارنة: جذر(100-36) ، القيمة الثانية: جذر(100) - جذر(36)", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "الأولى أكبر", type: "مقارنة", explanation: "8 > 4"},
+    {q: "أوجد س: 3س - 4 = 11", options: ["3", "4", "5", "6"], answer: "5", type: "الجبر", explanation: "3س = 15 إذن س = 5"},
+    {q: "مثلث زواياه (2س، 3س، 4س)، فما هي أصغر زاوية؟", options: ["20", "40", "60", "80"], answer: "40", type: "الهندسة", explanation: "9س=180، س=20، 2س=40"},
+    {q: "40% من س = 80 ، فما قيمة س؟", options: ["120", "160", "200", "240"], answer: "200", type: "النسب المئوية", explanation: "(80 × 100) / 40 = 200"},
+    {q: "مقارنة: (1/3)^2 ، القيمة الثانية: 1/3", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "الثانية أكبر", type: "مقارنة", explanation: "1/3 أكبر من 1/9"},
+    {q: "نرد، ما احتمال ظهور عدد أقل من 3؟", options: ["1/6", "1/3", "1/2", "2/3"], answer: "1/3", type: "الإحصاء", explanation: "عددين (1، 2) من أصل 6 = 2/6 = 1/3"},
+    {q: "رجل اشترى 5 أقلام وحقيبة بـ 100 ريال، إذا كان سعر الحقيبة 50، فكم سعر القلم؟", options: ["5", "10", "15", "20"], answer: "10", type: "اللفظي", explanation: "50 ÷ 5 = 10"},
+    {q: "مساحة مربع محيطه 20 سم؟", options: ["20", "25", "40", "100"], answer: "25", type: "الهندسة", explanation: "الضلع=5، المساحة=5×5=25"},
+    {q: "(0.2)^3 تساوي:", options: ["0.8", "0.08", "0.008", "0.0008"], answer: "0.008", type: "الجبر", explanation: "0.2 × 0.2 × 0.2 = 0.008"},
+    {q: "مقارنة: 2^5 ، القيمة الثانية: 5^2", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "الأولى أكبر", type: "مقارنة", explanation: "32 > 25"},
+    {q: "يقطع عداء 10 كم في 40 دقيقة، كم يقطع في ساعة؟", options: ["12", "15", "18", "20"], answer: "15", type: "السرعة", explanation: "10 كم لكل 40 دقيقة تعني 15 كم في 60 دقيقة"},
+    {q: "زاد راتب موظف من 4000 إلى 5000، ما نسبة الزيادة؟", options: ["20%", "25%", "30%", "40%"], answer: "25%", type: "النسب المئوية", explanation: "1000 / 4000 = 25%"},
+    {q: "دائرة مساحتها 49ط، ما طول قطرها؟", options: ["7", "14", "21", "28"], answer: "14", type: "الهندسة", explanation: "نصف القطر=7 إذن القطر=14"},
+    {q: "س + ص = 8 ، س ص = 15 ، ما قيمة س² + ص²؟", options: ["34", "40", "49", "64"], answer: "34", type: "الجبر", explanation: "(س+ص)² - 2س ص = 64 - 30 = 34"},
+    {q: "مقارنة: 15% من 60 ، القيمة الثانية: 9", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "0.15 × 60 = 9"},
+    {q: "متوسط الأعمار 25، 30، 35 هو:", options: ["25", "30", "32", "35"], answer: "30", type: "الإحصاء", explanation: "مجموعهم 90 ÷ 3 = 30"},
+    {q: "تقطع سيارة 480 كم في 4 ساعات، ما سرعتها؟", options: ["100", "110", "120", "130"], answer: "120", type: "السرعة", explanation: "480 ÷ 4 = 120"},
+    {q: "0.5% من 2000؟", options: ["1", "10", "100", "1000"], answer: "10", type: "النسب المئوية", explanation: "0.005 × 2000 = 10"},
+    {q: "س/5 = 12 ، ما قيمة س؟", options: ["50", "60", "70", "80"], answer: "60", type: "الجبر", explanation: "12 × 5 = 60"},
+    {q: "مكعب طول حرفه 3 سم، ما حجمه؟", options: ["9", "18", "27", "81"], answer: "27", type: "الهندسة", explanation: "3 × 3 × 3 = 27"},
+    {q: "مقارنة: 3^(-2) ، القيمة الثانية: 1/9", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "الأس السالب يقلب الكسر"},
+    {q: "أكمل المتتابعة: 2 ، 5 ، 10 ، 17 ، ...", options: ["24", "26", "28", "30"], answer: "26", type: "المتتابعات", explanation: "زيادة أعداد فردية: +3، +5، +7، +9"},
+    {q: "جذر(س + 9) = 5 ، ما قيمة س؟", options: ["4", "16", "25", "34"], answer: "16", type: "الجبر", explanation: "س+9 = 25 إذن س=16"},
+    {q: "كم عدد أضلاع مضلع مجموع زواياه الداخلية 180؟", options: ["3", "4", "5", "6"], answer: "3", type: "الهندسة", explanation: "المثلث مجموع زواياه 180"},
+    {q: "سلعة بـ 120 زادت 10%، كم سعرها الجديد؟", options: ["130", "132", "140", "142"], answer: "132", type: "النسب المئوية", explanation: "120 + 12 = 132"},
+    {q: "مقارنة: 0.75 ، القيمة الثانية: 3/4", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "3/4 تساوي 0.75"},
+    {q: "المنوال للقيم (3، 7، 3، 5، 3، 2) هو:", options: ["2", "3", "5", "7"], answer: "3", type: "الإحصاء", explanation: "الرقم 3 هو الأكثر تكراراً"},
+    {q: "عداء يجري بسرعة 10 كم/س، كم يستغرق لقطع 5 كم؟", options: ["20 دقيقة", "30 دقيقة", "40 دقيقة", "50 دقيقة"], answer: "30 دقيقة", type: "السرعة", explanation: "نصف السرعة يعني نصف الساعة"},
+    {q: "(س-2)(س+2) تساوي:", options: ["س²+4", "س²-4", "س²-4س", "س²+4س"], answer: "س²-4", type: "الجبر", explanation: "فرق بين مربعين"},
+    {q: "مساحة مستطيل طوله 10 وعرضه 4؟", options: ["14", "28", "40", "80"], answer: "40", type: "الهندسة", explanation: "10 × 4 = 40"},
+    {q: "مقارنة: 5/2 ، القيمة الثانية: 2.5", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "5/2 = 2.5"},
+    {q: "75% من 80؟", options: ["40", "50", "60", "70"], answer: "60", type: "النسب المئوية", explanation: "3/4 × 80 = 60"},
+    {q: "3^س = 1/27 ، ما قيمة س؟", options: ["3", "-3", "9", "-9"], answer: "-3", type: "الجبر", explanation: "1/27 هي 3^(-3)"},
+    {q: "محيط دائرة قطرها 10 سم؟", options: ["5ط", "10ط", "20ط", "25ط"], answer: "10ط", type: "الهندسة", explanation: "القطر × ط"},
+    {q: "مقارنة: 1000 جرام ، القيمة الثانية: 1 كجم", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "1 كجم = 1000 جرام"},
+    {q: "تسير طائرة 900 كم/س، كم تقطع في 20 دقيقة؟", options: ["200", "300", "450", "600"], answer: "300", type: "السرعة", explanation: "900 / 3 = 300"},
+    {q: "س + 7 = 2 ، ما قيمة س؟", options: ["5", "-5", "9", "-9"], answer: "-5", type: "الجبر", explanation: "2 - 7 = -5"},
+    {q: "إذا كان ثمن 4 أثواب 600 ريال، فكم ثمن ثوب واحد؟", options: ["120", "150", "180", "200"], answer: "150", type: "النسب المئوية", explanation: "600 / 4 = 150"},
+    {q: "مربع مساحته 36 سم²، ما محيطه؟", options: ["6", "12", "24", "36"], answer: "24", type: "الهندسة", explanation: "الضلع=6، المحيط=6×4=24"},
+    {q: "مقارنة: (0.1)^2 ، القيمة الثانية: 0.01", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "0.1 × 0.1 = 0.01"},
+    {q: "متوسط 10، 20، 30، 40، 50 هو:", options: ["20", "25", "30", "35"], answer: "30", type: "الإحصاء", explanation: "العدد الأوسط في سلسلة متتالية"},
+    {q: "س² - 25 = 0 ، ما قيمة س الموجبة؟", options: ["5", "10", "25", "50"], answer: "5", type: "الجبر", explanation: "س²=25 إذن س=5"},
+    {q: "مثلث متطابق الضلعين فيه زاوية الرأس 80، فكم زاوية القاعدة؟", options: ["40", "50", "80", "100"], answer: "50", type: "الهندسة", explanation: "(180-80)/2 = 50"},
+    {q: "10% من 10% من 100؟", options: ["0.1", "1", "10", "100"], answer: "1", type: "النسب المئوية", explanation: "0.1 × 10 = 1"},
+    {q: "يقطع شخص 600 متر في 3 دقائق، كم يقطع في ساعة؟", options: ["6 كم", "10 كم", "12 كم", "18 كم"], answer: "12 كم", type: "السرعة", explanation: "600×20 = 12000 متر = 12 كم"},
+    {q: "مقارنة: 2^10 ، القيمة الثانية: 1000", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "الأولى أكبر", type: "مقارنة", explanation: "1024 > 1000"},
+    {q: "أوجد س: 2س/3 = 4", options: ["2", "4", "6", "8"], answer: "6", type: "الجبر", explanation: "2س = 12 إذن س=6"},
+    {q: "مساحة دائرة محيطها 2ط؟", options: ["ط", "2ط", "4ط", "8ط"], answer: "ط", type: "الهندسة", explanation: "نق=1 إذن المساحة=ط"},
+    {q: "إذا كان 25% من س = 50، فما قيمة 50% من س؟", options: ["50", "75", "100", "200"], answer: "100", type: "النسب المئوية", explanation: "ضعف الـ 50"},
+    {q: "مقارنة: 1/2 + 1/3 ، القيمة الثانية: 1/2 × 1/3", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "الأولى أكبر", type: "مقارنة", explanation: "5/6 > 1/6"},
+    {q: "محمد لديه 20 ريال، صرف نصفها ثم أخذ 5 ريال، كم معه؟", options: ["10", "15", "20", "25"], answer: "15", type: "اللفظي", explanation: "10 + 5 = 15"},
+    {q: "صندوق به 10 كرات مرقمة من 1-10، ما احتمال سحب عدد فردي؟", options: ["1/10", "1/5", "1/2", "1"], answer: "1/2", type: "الإحصاء", explanation: "5 أعداد فردية من 10 = 1/2"},
+    {q: "س + ص = 10 ، س - ص = 2 ، ما قيمة س؟", options: ["4", "6", "8", "12"], answer: "6", type: "الجبر", explanation: "بالجمع 2س=12 إذن س=6"},
+    {q: "زاوية المربع؟", options: ["45", "60", "90", "180"], answer: "90", type: "الهندسة", explanation: "زوايا المربع قائمة"},
+    {q: "مقارنة: 4/5 ، القيمة الثانية: 0.8", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "4/5 = 0.8"},
+    {q: "5% من 400؟", options: ["10", "20", "40", "80"], answer: "20", type: "النسب المئوية", explanation: "0.05 × 400 = 20"},
+    {q: "سيارة تسير 100 كم/س، كم تقطع في ربع ساعة؟", options: ["15", "20", "25", "30"], answer: "25", type: "السرعة", explanation: "100 / 4 = 25"},
+    {q: "5^س = 625 ، ما قيمة س؟", options: ["2", "3", "4", "5"], answer: "4", type: "الجبر", explanation: "5 × 5 × 5 × 5 = 625"},
+    {q: "مجموع زوايا المثلث؟", options: ["90", "180", "270", "360"], answer: "180", type: "الهندسة", explanation: "حقيقة هندسية"},
+    {q: "مقارنة: (-2)^4 ، القيمة الثانية: 16", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "الأس الزوجي يلغي السالب"},
+    {q: "ثمن كتاب 50 ريال، خُصم منه 10%، كم سعره الجديد؟", options: ["40", "45", "49", "55"], answer: "45", type: "النسب المئوية", explanation: "50 - 5 = 45"},
+    {q: "س/2 = 10 ، فما قيمة س + 5؟", options: ["15", "20", "25", "30"], answer: "25", type: "الجبر", explanation: "س=20، إذن 20+5=25"},
+    {q: "قطر دائرة مساحتها 100ط؟", options: ["10", "20", "50", "100"], answer: "20", type: "الهندسة", explanation: "نق=10 إذن القطر=20"},
+    {q: "مقارنة: 0.2 ، القيمة الثانية: 0.20", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "الأصفار يمين الفاصلة لا تؤثر"},
+    {q: "تسير طائرة 800 كم/س، كم ساعة تحتاج لقطع 3200 كم؟", options: ["2", "3", "4", "5"], answer: "4", type: "السرعة", explanation: "3200 / 800 = 4"},
+    {q: "الوسيط للقيم (2، 8، 5، 10، 12) هو:", options: ["5", "8", "10", "12"], answer: "8", type: "الإحصاء", explanation: "بعد الترتيب: 2، 5، 8، 10، 12"},
+    {q: "(س + 1)^2 = 16 ، ما قيمة س الموجبة؟", options: ["3", "4", "5", "15"], answer: "3", type: "الجبر", explanation: "س+1=4 إذن س=3"},
+    {q: "مساحة مثلث متطابق الأضلاع طول ضلعه 2؟", options: ["جذر(3)", "2", "4", "2جذر(3)"], answer: "جذر(3)", type: "الهندسة", explanation: "مساحة المثلث المتطابق الأضلاع"},
+    {q: "200% من 50؟", options: ["50", "100", "150", "200"], answer: "100", type: "النسب المئوية", explanation: "2 × 50 = 100"},
+    {q: "مقارنة: 1/4 ، القيمة الثانية: 0.25", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "1/4 = 0.25"},
+    {q: "أوجد س: س + 5 = 5", options: ["0", "1", "5", "10"], answer: "0", type: "الجبر", explanation: "5 - 5 = 0"},
+    {q: "زاوية المستطيل؟", options: ["45", "60", "90", "120"], answer: "90", type: "الهندسة", explanation: "زوايا المستطيل قائمة"},
+    {q: "10% من 500؟", options: ["5", "50", "55", "500"], answer: "50", type: "النسب المئوية", explanation: "500 / 10 = 50"},
+    {q: "تقطع سيارة 60 كم في 30 دقيقة، ما سرعتها بالساعة؟", options: ["60", "100", "120", "180"], answer: "120", type: "السرعة", explanation: "60 × 2 = 120"},
+    {q: "متوسط 4 ، 6 ، 8 هو:", options: ["4", "6", "8", "18"], answer: "6", type: "الإحصاء", explanation: "18 / 3 = 6"},
+    {q: "س² = 49", options: ["7", "-7", "±7", "14"], answer: "±7", type: "الجبر", explanation: "الجذر التربيعي يعطي قيمتين"},
+    {q: "محيط مربع ضلعه 5؟", options: ["10", "15", "20", "25"], answer: "20", type: "الهندسة", explanation: "5 × 4 = 20"},
+    {q: "25% من 100؟", options: ["10", "25", "50", "75"], answer: "25", type: "النسب المئوية", explanation: "100 / 4 = 25"},
+    {q: "سيارة تسير 120 كم في ساعتين، كم سرعتها؟", options: ["50", "60", "120", "240"], answer: "60", type: "السرعة", explanation: "120 / 2 = 60"},
+    {q: "مقارنة: 5^2 ، القيمة الثانية: 25", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "5 × 5 = 25"},
+    {q: "س/4 = 3", options: ["1", "7", "12", "16"], answer: "12", type: "الجبر", explanation: "3 × 4 = 12"},
+    {q: "مساحة مربع ضلعه 6؟", options: ["12", "24", "36", "60"], answer: "36", type: "الهندسة", explanation: "6 × 6 = 36"},
+    {q: "50% من 80؟", options: ["20", "30", "40", "50"], answer: "40", type: "النسب المئوية", explanation: "80 / 2 = 40"},
+    {q: "مقارنة: 0.1 ، القيمة الثانية: 0.09", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "الأولى أكبر", type: "مقارنة", explanation: "0.1 > 0.09"},
+    {q: "س + 2 = 10", options: ["6", "8", "10", "12"], answer: "8", type: "الجبر", explanation: "10 - 2 = 8"},
+    {q: "زاوية المثلث المتطابق الأضلاع؟", options: ["30", "45", "60", "90"], answer: "60", type: "الهندسة", explanation: "180 / 3 = 60"},
+    {q: "1% من 100؟", options: ["1", "10", "0.1", "0.01"], answer: "1", type: "النسب المئوية", explanation: "100 / 100 = 1"},
+    {q: "سيارة تسير 80 كم في ساعة، كم تقطع في ساعتين؟", options: ["80", "120", "160", "200"], answer: "160", type: "السرعة", explanation: "80 × 2 = 160"},
+    {q: "متوسط 2 ، 4 هو:", options: ["2", "3", "4", "6"], answer: "3", type: "الإحصاء", explanation: "6 / 2 = 3"},
+    {q: "س² = 100", options: ["10", "-10", "±10", "20"], answer: "±10", type: "الجبر", explanation: "الجذر التربيعي لـ 100"},
+    {q: "محيط مربع ضلعه 3؟", options: ["3", "6", "9", "12"], answer: "12", type: "الهندسة", explanation: "3 × 4 = 12"},
+    {q: "10% من 200؟", options: ["2", "10", "20", "22"], answer: "20", type: "النسب المئوية", explanation: "200 / 10 = 20"},
+    {q: "طائرة تقطع 500 كم في ساعة، كم في نصف ساعة؟", options: ["100", "250", "300", "500"], answer: "250", type: "السرعة", explanation: "500 / 2 = 250"},
+    {q: "مقارنة: 2^2 ، القيمة الثانية: 4", options: ["الأولى أكبر", "الثانية أكبر", "متساويتان", "المعطيات غير كافية"], answer: "متساويتان", type: "مقارنة", explanation: "2 × 2 = 4"}
         ];
 
+        // وظيفة اختيار 15 سؤال عشوائي
+        function getShuffledQuestions(sourceArray, count) {
+            const shuffled = [...sourceArray].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
 
+        const questions = getShuffledQuestions(allQuestions, 15);
         let cur = 0;
         let userAns = new Array(questions.length).fill(null);
         let flagged = new Array(questions.length).fill(false);
-        let timer = 1500;
+        let timer = 900;
 
-
-        function toggleTheme() {
-            document.body.classList.toggle('light-mode');
-            const icon = document.getElementById('t-icon');
-            icon.classList = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            icon.className = document.body.classList.contains('dark') ? 'fas fa-sun' : 'fas fa-moon';
         }
 
+        function openModal() { document.getElementById('modal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
         function render() {
             const q = questions[cur];
-            document.getElementById('q-idx').innerText = cur + 1;
             document.getElementById('q-text').innerText = q.q;
-           
+            document.getElementById('flag-btn').style.color = flagged[cur] ? '#ef4444' : '#cbd5e1';
+            
             const grid = document.getElementById('options-grid');
             grid.innerHTML = '';
-            q.opts.forEach(o => {
+            q.options.forEach(o => {
                 const btn = document.createElement('button');
-                btn.className = `opt-btn ${userAns[cur] === o ? 'selected' : ''}`;
+                btn.className = `opt-btn p-5 rounded-2xl text-right font-bold transition-all ${userAns[cur] === o ? 'selected' : ''}`;
                 btn.innerText = o;
-                btn.onclick = () => { userAns[cur] = o; render(); updateProg(); };
+                btn.onclick = () => { userAns[cur] = o; updateProgress(); render(); };
                 grid.appendChild(btn);
             });
 
-
-            document.getElementById('flag-btn').style.color = flagged[cur] ? '#ef4444' : '';
-            document.getElementById('flag-btn').style.opacity = flagged[cur] ? '1' : '0.2';
+            document.getElementById('next-btn').innerText = (cur === questions.length - 1) ? "تسليم" : "التالي";
             renderNav();
         }
 
-
         function renderNav() {
-            const grid = document.getElementById('nav-dots-grid');
+            const grid = document.getElementById('nav-grid');
             grid.innerHTML = '';
             questions.forEach((_, i) => {
-                const dot = document.createElement('button');
-                dot.className = `nav-dot ${i === cur ? 'active' : ''} ${userAns[i] ? 'answered' : ''} ${flagged[i] ? 'flagged' : ''}`;
+                const dot = document.createElement('div');
+                let cls = 'nav-dot';
+                
+                // ترتيب التحقق من الحالات مهم
+                if (i === cur) cls += ' dot-active';
+                if (userAns[i]) cls += ' dot-answered';
+                else if (flagged[i]) cls += ' dot-flagged';
+                
+                dot.className = cls;
                 dot.innerText = i + 1;
                 dot.onclick = () => { cur = i; render(); };
                 grid.appendChild(dot);
             });
         }
 
-
-        function updateProg() {
-            const count = userAns.filter(x => x !== null).length;
-            const p = (count / questions.length) * 100;
-            document.getElementById('prog-bar').style.width = p + '%';
-            document.getElementById('prog-val').innerText = Math.round(p) + '%';
+        function updateProgress() {
+            const solved = userAns.filter(a => a).length;
+            const percent = Math.round((solved / questions.length) * 100);
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('progress-percent').innerText = percent + '%';
         }
 
+        function next() {
+            if (cur < questions.length - 1) { cur++; render(); }
+            else { openModal(); }
+        }
 
-        function next() { (cur < questions.length - 1) ? (cur++, render()) : finishTest(); }
-        function prev() { if(cur > 0) { cur--; render(); } }
+        function prev() { if (cur > 0) { cur--; render(); } }
         function toggleFlag() { flagged[cur] = !flagged[cur]; render(); }
 
-
         function finishTest() {
-            let c = 0;
-            userAns.forEach((a, i) => { if(a === questions[i].a) c++; });
-            document.getElementById('main-test').classList.add('hidden');
+            closeModal();
+            let correct = 0;
+            const list = document.getElementById('review-list');
+            list.innerHTML = '';
+
+            questions.forEach((q, i) => {
+                const isCorrect = userAns[i] === q.answer;
+                if(isCorrect) correct++;
+                
+                const card = document.createElement('div');
+                card.className = `test-card p-6 border-r-8 ${isCorrect ? 'border-green-500' : 'border-red-500'}`;
+                card.innerHTML = `
+                    <p class="font-black mb-2">${q.q}</p>
+                    <div class="text-sm">
+                        <span class="opacity-60">إجابتك:</span> <span class="font-bold ${isCorrect ? 'text-green-600' : 'text-red-600'}">${userAns[i] || 'لم تحل'}</span>
+                        ${!isCorrect ? `<br><span class="opacity-60">الإجابة الصحيحة:</span> <span class="text-green-600 font-bold">${q.answer}</span>` : ''}
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+
+            document.getElementById('test-view').classList.add('hidden');
             document.getElementById('result-view').classList.remove('hidden');
-            document.getElementById('res-c').innerText = c;
-            document.getElementById('res-w').innerText = questions.length - c;
-            document.getElementById('res-p').innerText = Math.round((c/questions.length)*100) + '%';
+            document.getElementById('score-text').innerText = Math.round((correct / questions.length) * 100) + '%';
+            window.scrollTo(0,0);
         }
 
-
         setInterval(() => {
-            if(timer > 0) {
+            if (timer > 0) {
                 timer--;
                 let m = Math.floor(timer/60), s = timer%60;
                 document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
-            }
+            } else { finishTest(); }
         }, 1000);
-
 
         render();
     </script>
-    <script src="theme.js"></script>
 </body>
 </html>
-
-
-
