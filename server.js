@@ -20,8 +20,11 @@ const MODEL = "gemini-2.5-flash";
 // ========================================
 // 🔹 Function Gemini
 // ========================================
-async function askGemini(prompt) {
+async function askGemini(prompt, retries = 2) {
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000); // 10 ثواني
+
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1/models/${MODEL}:generateContent?key=${API_KEY}`,
       {
@@ -35,20 +38,23 @@ async function askGemini(prompt) {
               parts: [{ text: prompt }]
             }
           ]
-        })
+        }),
+        signal: controller.signal
       }
     );
 
-    // 🔴 تحقق من الخطأ
+    clearTimeout(timeout);
+
+    // 🔴 لو Gemini رجّع خطأ
     if (!response.ok) {
       const errorText = await response.text();
       console.error("❌ Gemini API Error:", errorText);
-      return "❌ فشل الاتصال بـ Gemini";
+
+      throw new Error("Gemini failed");
     }
 
     const data = await response.json();
 
-    // 🔍 اطبع الرد كامل (مهم)
     console.log("✅ Gemini Response:", JSON.stringify(data, null, 2));
 
     const text =
@@ -57,8 +63,15 @@ async function askGemini(prompt) {
     return text || "⚠️ لا يوجد رد";
 
   } catch (err) {
-    console.error("🔥 Server Error:", err);
-    return "❌ خطأ في السيرفر";
+    console.error("🔥 Error:", err.message);
+
+    // 🔁 إعادة المحاولة
+    if (retries > 0) {
+      console.log("🔁 إعادة المحاولة...");
+      return await askGemini(prompt, retries - 1);
+    }
+
+    return "❌ تعذر الاتصال، حاول مرة أخرى";
   }
 }
 // ========================================
