@@ -40,21 +40,28 @@ async function askGemini(prompt) {
       }
     );
 
+    // 🔴 تحقق من الخطأ
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("❌ Gemini API Error:", errorText);
+      return "❌ فشل الاتصال بـ Gemini";
+    }
 
     const data = await response.json();
 
+    // 🔍 اطبع الرد كامل (مهم)
+    console.log("✅ Gemini Response:", JSON.stringify(data, null, 2));
 
-    return (
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "⚠️ لا يوجد رد"
-    );
+    const text =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    return text || "⚠️ لا يوجد رد";
+
   } catch (err) {
-    console.error("Gemini Error:", err);
-    return "❌ خطأ في الاتصال";
+    console.error("🔥 Server Error:", err);
+    return "❌ خطأ في السيرفر";
   }
 }
-
-
 // ========================================
 // 🔹 API الشرح الذكي
 // ========================================
