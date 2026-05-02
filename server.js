@@ -17,14 +17,12 @@ app.use(express.json());
 const API_KEY = process.env.GEMINI_API_KEY;
 const MODEL = "gemini-2.5-flash";
 
+
 // ========================================
 // 🔹 Function Gemini
 // ========================================
-async function askGemini(prompt, retries = 2) {
+async function askGemini(prompt) {
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000); // 10 ثواني
-
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1/models/${MODEL}:generateContent?key=${API_KEY}`,
       {
@@ -38,40 +36,25 @@ async function askGemini(prompt, retries = 2) {
               parts: [{ text: prompt }]
             }
           ]
-        }),
-        signal: controller.signal
+        })
       }
     );
 
-    clearTimeout(timeout);
 
-    // 🔴 لو Gemini رجّع خطأ
-   if (!response.ok) {
-  const errorText = await response.text();
-  console.error("🔥 GEMINI ERROR:", errorText);
-  return "❌ فشل الاتصال بـ Gemini";
-}
     const data = await response.json();
 
-    console.log("✅ Gemini Response:", JSON.stringify(data, null, 2));
 
-    const text =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    return text || "⚠️ لا يوجد رد";
-
+    return (
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "⚠️ لا يوجد رد"
+    );
   } catch (err) {
-    console.error("🔥 Error:", err.message);
-
-    // 🔁 إعادة المحاولة
-    if (retries > 0) {
-      console.log("🔁 إعادة المحاولة...");
-      return await askGemini(prompt, retries - 1);
-    }
-
-    return "❌ تعذر الاتصال، حاول مرة أخرى";
+    console.error("Gemini Error:", err);
+    return "❌ خطأ في الاتصال";
   }
 }
+
+
 // ========================================
 // 🔹 API الشرح الذكي
 // ========================================
@@ -185,8 +168,7 @@ app.post("/api/plan", async (req, res) => {
 // ========================================
 // 🔹 تشغيل السيرفر
 // ========================================
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`🚀 UFUQ AI SERVER RUNNING ON PORT ${PORT}`);
+app.listen(5000, () => {
+  console.log("🚀 UFUQ AI SERVER RUNNING ON http://localhost:5000");
 });
+
