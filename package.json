@@ -1,12 +1,12 @@
 {
   "name": "ufuq",
   "version": "1.0.0",
-  "description": "UFUQ AI Server for Quantitative Training",
+  "description": "",
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
-  },
+  "start": "node server.js"
+},
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
