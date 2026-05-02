@@ -7,7 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
+  <meta name="google-site-verification" content="6bPs-oZ3pB9y4Or_vSv3ULk5UWJodKSkIW7M3v22cTA" />
+  <style>
         :root {
             --bg-body: #ffffff;
             --text-main: #020617;
@@ -121,33 +122,71 @@
 <body>
 
 
-    <nav class="bg-[#1B2436] text-white sticky top-0 z-50 shadow-2xl px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-             <div class="flex-shrink-0 flex items-center space-x-2 space-x-reverse">
-                    <img class="h-12 w-auto rounded-full" src="logo.png" alt="UFUQ Logo">
-                    <span class="text-3xl font-bold tracking-tight text-white/90">أفق (UFUQ)</span>
-                </div>
-
-
-           
-            <div class="hidden lg:flex gap-8">
-                <a href="index.html" class="nav-link  text-[#FFB800]">الرئيسية</a>
-                <a href="tests.html" class="nav-link">الاختبارات</a>
-                <a href="study-plan.html" class="nav-link">خطة المذاكرة</a>
-                <a href="chat.html" class="nav-link">الدردشة الذكية  </a>
-
-
-            </div>
-
-
-            <div class="flex items-center gap-4">
-                <button id="themeToggle" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-[#FFB800]">
-                    <i id="themeIcon" class="fas fa-moon text-lg"></i>
-                </button>
- 
+    <!-- الهيدر المحدث -->
+<nav class="bg-[#1B2436] text-white sticky top-0 z-50 shadow-2xl px-6 py-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <!-- اللوجو -->
+        <div class="flex-shrink-0 flex items-center space-x-2 space-x-reverse">
+            <img class="h-12 w-auto rounded-full" src="logo.png" alt="UFUQ Logo">
+            <span class="text-2xl md:text-3xl font-bold tracking-tight text-white/90">أفق (UFUQ)</span>
         </div>
-    </nav>
 
+        <!-- روابط التنقل (تظهر في الشاشات الكبيرة وتختفي في الجوال) -->
+        <div id="navMenu" class="hidden absolute lg:static top-full left-0 w-full lg:w-auto bg-[#1B2436] lg:bg-transparent flex-col lg:flex-row lg:flex gap-6 p-6 lg:p-0 border-t lg:border-none border-white/10 shadow-xl lg:shadow-none">
+            <a href="index.html" class="nav-link text-[#FFB800]">الرئيسية</a>
+            <a href="tests.html" class="nav-link">الاختبارات</a>
+            <a href="study-plan.html" class="nav-link">خطة المذاكرة</a>
+            <a href="chat.html" class="nav-link">الدردشة الذكية</a>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <!-- زر تبديل الثيم -->
+            <button id="themeToggle" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-[#FFB800]">
+                <i id="themeIcon" class="fas fa-moon text-lg"></i>
+            </button>
+            
+            <!-- زر القائمة للجوال (يظهر فقط في الشاشات الصغيرة) -->
+            <button id="mobileMenuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-white">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // منطق القائمة للجوال
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navMenu = document.getElementById('navMenu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+        // تبديل ظهور القائمة
+        navMenu.classList.toggle('hidden');
+        navMenu.classList.toggle('flex');
+        
+        // تغيير شكل الأيقونة بين (Bars) و (X)
+        const icon = mobileMenuBtn.querySelector('i');
+        if (navMenu.classList.contains('hidden')) {
+            icon.classList.replace('fa-times', 'fa-bars');
+        } else {
+            icon.classList.replace('fa-bars', 'fa-times');
+        }
+    });
+
+    // كود الثيم الأصلي (تأكد من وجوده)
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const body = document.documentElement;
+
+    themeToggle.addEventListener('click', () => {
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+            themeIcon.classList.replace('fa-sun', 'fa-moon');
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+        }
+    });
+</script>
 
     <main class="max-w-7xl mx-auto px-6">
         <section class="flex flex-col lg:flex-row-reverse items-center gap-12 py-20">
