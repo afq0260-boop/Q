@@ -15,7 +15,7 @@ app.use(express.json());
 
 
 const API_KEY = process.env.GEMINI_API_KEY;
-const MODEL = "gemini-2.5-flash";
+const MODEL = "gemini-1.5-flash";
 
 // ========================================
 // 🔹 Function Gemini
@@ -46,13 +46,11 @@ async function askGemini(prompt, retries = 2) {
     clearTimeout(timeout);
 
     // 🔴 لو Gemini رجّع خطأ
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("❌ Gemini API Error:", errorText);
-
-      throw new Error("Gemini failed");
-    }
-
+   if (!response.ok) {
+  const errorText = await response.text();
+  console.error("🔥 GEMINI ERROR:", errorText);
+  return "❌ فشل الاتصال بـ Gemini";
+}
     const data = await response.json();
 
     console.log("✅ Gemini Response:", JSON.stringify(data, null, 2));
